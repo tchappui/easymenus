@@ -50,6 +50,7 @@ class App:
             f"--- {entries['b'].label} ({entries['b'].id})\n"
             f"---- {entries['c'].label} ({entries['c'].id})\n"
         )
+        # Retour au point de départ
         self.handle_start_menu(entries)
 
     def handle_quit(self, entries):
