@@ -1,3 +1,3 @@
 # Easy Menus
 
-Exemple pédagogique sur la création d'un système de menu simple pour un application terminal en python.
+Educational example on creating a simple object-oriented menu system for a command-line application written in Python. 
