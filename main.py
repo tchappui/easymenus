@@ -1,14 +1,20 @@
 from app.menus import Menu
 
+# Fake database results
 data = {
     'A': ["A1", "A2", "A3", "A4"],
     'B': ["B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8"],
     'C': ["C1", "C2", "C3", "C4", "C6"],
 }
 
-class App:
+class Application:
+    """Represents the demo application."""
+    
     def start(self):
-        """Main entry point of the demo application."""
+        """Main entry point of the demo application.
+        
+        The main menu is handled by self.handle_start_menu.
+        """
         self.handle_start_menu()
 
     def handle_start_menu(self, entries={}):
@@ -85,7 +91,12 @@ class App:
     def handle_quit(self, entries):
         """Handler method for the quit choice."""
         print("Bye, bye!")
+        
+def main():
+    """Main entry point of the application."""
+    app = Application()
+    app.start()
 
 if __name__ == "__main__":
-    app = App()
-    app.start()
+    main()
+    
