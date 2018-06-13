@@ -1,13 +1,4 @@
-class _DefaultFormater:
-    """Class responsible for the formatting of the menus."""
-
-    def format(self, menu):
-        """Formats a menu."""
-        lines = [f'--- {menu.title} ---']
-        lines.extend(f'{k} - {v.label}' for k, v in sorted(menu.numeric_entries.items()))
-        lines.extend(f'{k} - {v.label}' for k, v in sorted(menu.keyword_entries.items()))
-        lines.append(menu.prompt)
-        return '\n'.join(lines)
+from .formatters import DefaultFormatter
 
 class MenuEntry:
     """Class representing a menu entry."""
@@ -52,7 +43,7 @@ class Menu:
         self.prompt = prompt
         self.numeric_entries = {}
         self.keyword_entries = {}
-        self.formater = formatter if formatter else _DefaultFormater()
+        self.formatter = formatter if formatter else DefaultFormatter()
         self.manager = manager if manager else MenuManager(self)
 
     def add(self, label, handler, id=None):
@@ -75,4 +66,4 @@ class Menu:
     @property
     def message(self):
         """Formats the menu."""
-        return self.formater.format(self)
+        return self.formatter.format(self)
