@@ -24,9 +24,9 @@ class Application:
         2. Add menu entries
         3. Display the menu to the user
         """
-        menu = Menu('accueil', title='Accueil', prompt='Quelle entrée choisissez-vous? ')
-        menu.add('Choisir un A', self.handle_a_menu, 'a')
-        menu.add('Quitter', self.handle_quit, 'q')
+        menu = Menu('start', title='Start menu', prompt='What do you want to do? ')
+        menu.add('Choose a A', self.handle_a_menu, 'a')
+        menu.add('Quit', self.handle_quit, 'q')
         menu.manager.ask(entries)
 
     def handle_a_menu(self, entries={}):
@@ -37,11 +37,11 @@ class Application:
         2. Add keyword menu entries to quit the app and to return to the previous menu
         3. Display the menu to the user
         """
-        menu = Menu('a', title="Menu A", prompt='Quelle entrée choisissez-vous? ')
+        menu = Menu('a', title="Menu A", prompt='What do you want to do? ')
         for a in data['A']:
             menu.add(a, self.handle_b_menu)
-        menu.add('Quitter', self.handle_quit, 'q')
-        menu.add("Revenir à l'accueil", self.handle_start_menu, 'a')
+        menu.add('Quit', self.handle_quit, 'q')
+        menu.add("Return to start menu", self.handle_start_menu, 'a')
         menu.manager.ask(entries)
 
     def handle_b_menu(self, entries={}):
@@ -52,12 +52,12 @@ class Application:
         2. Add keyword menu entries to quit, return to the main menu or return to the previous menu.
         3. Display the menu to the user
         """
-        menu = Menu('b', title="Menu B", prompt='Quelle entrée choisissez-vous? ')
+        menu = Menu('b', title="Menu B", prompt='What do you want to do? ')
         for b in data['B']:
             menu.add(b, self.handle_c_menu)
-        menu.add('Quitter', self.handle_quit, 'q')
-        menu.add("Revenir à l'accueil", self.handle_start_menu, 'a')
-        menu.add("Revenir en arrière", self.handle_a_menu, 'b')
+        menu.add('Quit', self.handle_quit, 'q')
+        menu.add("Return to start menu", self.handle_start_menu, 'a')
+        menu.add("Return to previous menu", self.handle_a_menu, 'b')
         menu.manager.ask(entries)
 
     def handle_c_menu(self, entries={}):
@@ -71,16 +71,16 @@ class Application:
         menu = Menu('c', title="Menu C", prompt='Quelle entrée choisissez-vous? ')
         for c in data['C']:
             menu.add(c, self.handle_final_print)
-        menu.add('Quitter', self.handle_quit, 'q')
-        menu.add("Revenir à l'accueil", self.handle_start_menu, 'a')
-        menu.add("Revenir en arrière", self.handle_a_menu, 'b')
+        menu.add('Quit', self.handle_quit, 'q')
+        menu.add("Return to start menu", self.handle_start_menu, 'a')
+        menu.add("Return to previous menu", self.handle_a_menu, 'b')
         menu.manager.ask(entries)
 
     def handle_final_print(self, entries={}):
         """Handler method for the final task, then returns to the main menu."""
         print(
             "Vous avez sélectionné:\n"
-            f"- {entries['accueil'].label} ({entries['accueil'].id})\n"
+            f"- {entries['start'].label} ({entries['start'].id})\n"
             f"-- {entries['a'].label} ({entries['a'].id})\n"
             f"--- {entries['b'].label} ({entries['b'].id})\n"
             f"---- {entries['c'].label} ({entries['c'].id})\n"
