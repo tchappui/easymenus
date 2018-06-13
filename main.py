@@ -1,4 +1,4 @@
-from menus import Menu
+from app.menus import Menu
 
 data = {
     'A': ["A1", "A2", "A3", "A4"],
@@ -8,15 +8,29 @@ data = {
 
 class App:
     def start(self):
+        """Main entry point of the demo application."""
         self.handle_start_menu()
 
     def handle_start_menu(self, entries={}):
+        """Handler method for the main menu.
+        
+        1. Create the menu
+        2. Add menu entries
+        3. Display the menu to the user
+        """
         menu = Menu('accueil', title='Accueil', prompt='Quelle entrée choisissez-vous? ')
         menu.add('Choisir un A', self.handle_a_menu, 'a')
         menu.add('Quitter', self.handle_quit, 'q')
         menu.manager.ask(entries)
 
     def handle_a_menu(self, entries={}):
+        """Handler method for the A menu.
+        
+        1. Create the menu
+        2. Add numeric menu entries from the 'pseudo-database'
+        2. Add keyword menu entries to quit the app and to return to the previous menu
+        3. Display the menu to the user
+        """
         menu = Menu('a', title="Menu A", prompt='Quelle entrée choisissez-vous? ')
         for a in data['A']:
             menu.add(a, self.handle_b_menu)
@@ -25,6 +39,13 @@ class App:
         menu.manager.ask(entries)
 
     def handle_b_menu(self, entries={}):
+        """Handler method for the B menu.
+        
+        1. Create the menu
+        2. Add numeric menu entries from the 'pseudo-database'
+        2. Add keyword menu entries to quit, return to the main menu or return to the previous menu.
+        3. Display the menu to the user
+        """
         menu = Menu('b', title="Menu B", prompt='Quelle entrée choisissez-vous? ')
         for b in data['B']:
             menu.add(b, self.handle_c_menu)
@@ -34,6 +55,13 @@ class App:
         menu.manager.ask(entries)
 
     def handle_c_menu(self, entries={}):
+        """Handler method for the C menu.
+        
+        1. Create the menu
+        2. Add numeric menu entries from the 'pseudo-database'
+        2. Add keyword menu entries to quit, return to the main menu or return to the previous menu.
+        3. Display the menu to the user
+        """
         menu = Menu('c', title="Menu C", prompt='Quelle entrée choisissez-vous? ')
         for c in data['C']:
             menu.add(c, self.handle_final_print)
@@ -43,6 +71,7 @@ class App:
         menu.manager.ask(entries)
 
     def handle_final_print(self, entries={}):
+        """Handler method for the final task, then returns to the main menu."""
         print(
             "Vous avez sélectionné:\n"
             f"- {entries['accueil'].label} ({entries['accueil'].id})\n"
@@ -54,6 +83,7 @@ class App:
         self.handle_start_menu(entries)
 
     def handle_quit(self, entries):
+        """Handler method for the quit choice."""
         print("Bye, bye!")
 
 if __name__ == "__main__":
