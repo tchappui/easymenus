@@ -41,7 +41,7 @@ class Application:
         for a in data['A']:
             menu.add(a, self.handle_b_menu)
         menu.add('Quit', self.handle_quit, 'q')
-        menu.add("Return to start menu", self.handle_start_menu, 'a')
+        menu.add("Return to start menu", self.handle_start_menu, 'm')
         menu.manager.ask(entries)
 
     def handle_b_menu(self, entries={}):
