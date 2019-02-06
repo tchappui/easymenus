@@ -1,14 +1,15 @@
-from .formatters import DefaultFormatter
+import itertools
+from collections import OrderedDict
 
 class MenuEntry:
     """Class representing a menu entry."""
 
-    def __init__(self, id, label, handler, menu):
+    def __init__(self, menu, id, label, handler):
         """Constructor."""
+        self.menu = menu
         self.id = id
         self.label = label
         self.handler = handler
-        self.menu = menu
 
 class MenuManager:
     """Class responsible for the management of a menu."""
@@ -21,11 +22,11 @@ class MenuManager:
         """Asks the user for an input and repeat the request until the
         answer is correct."""
         while True:
-            answer = input(self.menu.message).lower().strip()
-            if self.menu.is_valid(answer):
+            answer = input(self.menu.message).strip()
+            if answer in self.menu.entries:
                 return self.menu.get(answer)
 
-    def ask(self, entries={}):
+    def render(self, entries={}):
         """Prompts the user for an input and execute the correct handler method."""
         menu_entry = self._input()
         # The chosen entry is saved
@@ -33,38 +34,66 @@ class MenuManager:
         # Let's call the handler method for the chosen entry
         menu_entry.handler(entries)
 
+class MenuEntryCollection:
+    """Class representing a collection of menu entries accessible by order of addition and id type."""
+
+    def __init__(self):
+        self.numeric = OrderedDict()
+        self.alpha = OrderedDict()
+        self.alnum = OrderedDict()
+
+    @property
+    def all(self):
+        """Generator allowing iteration over all available entries."""
+        return (entry for entry in self.alnum.values())
+
+    def add(self, entry):
+        """Adds a new entry to the collection."""
+        self.all.append(entry)
+        self.alnum[str(entry.id)] = entry
+        if isinstance(entry.id, int):
+            self.numeric[entry.id] = entry
+        else:
+            self.alpha[str(entry.id)] = entry
+
+    def __iadd__(self, entry):
+        """Implements the += operator as a synonyme of add."""
+        self.add(entry)
+
+    def __getitem__(self, key):
+        return self.alnum.get(str(key), self.alnum.get(str(key).lower())) 
+
+    def __contains__(self, value):
+        """Returns True if value is a valid choice in the MenuEntryCollection."""
+        return str(value) in self.alnum or str(value).lower() in self.alnum
+
 
 class Menu:
     """Class reprensenting a menu."""
 
-    def __init__(self, name, title=None, prompt='--> ', formatter=None, manager=None):
+    def __init__(self, name, manager=None):
         """Constructor."""
         self.name = name
-        self.counter = 1
-        self.title = title if title else name.title()
-        self.prompt = prompt
-        # Numeric entries are those represented by a numeric choice number that will be 
-        # auto-incremented
-        self.numeric_entries = {}
-        # Keyword entries ate those repesented by an alphabetical letter
-        self.keyword_entries = {}
-        # formatter and manager can be customized if needed
-        self.formatter = formatter if formatter else DefaultFormatter()
-        self.manager = manager if manager else MenuManager(self)
+        self.entries = MenuEntryCollection()
+        self.manager = manager if manager else MenuManager(self)   
+        self._counter = itertools.count(start=1)   
 
-    def add(self, label, handler, id=None):
+    def add(self, entry_text, handler, id=None):
         """Appends a new entry to the menu. The new entry is numeric by default."""
         if id is None:
-            # Get the next value and increment the counter
-            id = self.counter
-            self.counter += 1
-            self.numeric_entries[str(id)] = MenuEntry(id, label, handler, self)
-        else:
-            self.keyword_entries[id] = MenuEntry(id, label, handler, self)
+            id = next(self._counter)
+        self.entries += MenuEntry(self, id, entry_text, handler)
 
-    def get(self, answer):
-        """Returns the MenuEntry corresponding to a given answer of the user."""
-        return {**self.numeric_entries, **self.keyword_entries}.get(answer, None)
+    def add_multiple(self, entries, handler):
+        """Appends a new entries to the menu in a list or a dictionary."""
+        if isinstance(entries, list):
+            for entry_text in entries:
+                id = next(self._counter)
+                self.entries += MenuEntry(self, id, entry_text, handler)
+        elif isinstance(entries, dict):
+            for id, entry_text in entries.items():
+                self.entries += MenuEntry(self, id, entry_text, handler)
+
 
     def is_valid(self, answer):
         """Returns True if the user answer is a valid one.
