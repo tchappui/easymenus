@@ -8,7 +8,10 @@ _DEFAULT_TEMPLATE = """
 {% for key, entry in menu -%}
 {{ key }} - {{ entry.text }}
 {% endfor -%}
-{{ menu.prompt }}"""
+{%- if menu.prompt -%}
+{{ menu.prompt }}
+{%- else -%}
+--> {% endif -%}"""
 
 
 class MenuEntry:
@@ -30,18 +33,16 @@ class Menu:
     def __init__(
         self, 
         name, 
-        title, 
-        prompt="--> ",
         template=Template(_DEFAULT_TEMPLATE),
+        **meta
     ):
         """Constructor."""
         self._counter = 1
         self._entries = {}
 
         self.name = name
-        self.title = title
-        self.prompt = prompt
         self.template = template
+        self.meta = meta
 
         self.choices[name] = None
 
@@ -76,4 +77,7 @@ class Menu:
 
     def __iter__(self):
         return iter(self._entries.items())
+
+    def __getattr__(self, key):
+        return self.meta.get(key)
 

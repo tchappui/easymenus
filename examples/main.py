@@ -12,7 +12,7 @@ class Application:
     
     def start(self):
         """Main entry point of the demo application."""
-        menu = Menu('start', title='Start Menu', prompt='What do you want to do ? ')
+        menu = Menu('start', title='Start Menu', prompt="What do you want to do ? ")
         menu.add('Choose a A', self.handle_a_menu, 'a')
         menu.add('Quit', self.handle_quit, 'q')
         menu()
