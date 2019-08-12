@@ -1,4 +1,4 @@
-from easymenus.core import Menu
+from easymenus import Menu
 
 # Fake database results
 data = {

@@ -23,7 +23,7 @@ class MenuEntry:
         self.data = data
 
 class Menu:
-    """Class reprensenting a menu."""
+    """Class representing a menu."""
 
     choices = {}
 
