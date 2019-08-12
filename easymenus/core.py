@@ -1,8 +1,8 @@
 from jinja2 import Template
 
 
-_DEFAULT_TEMPLATE = \
-"""{% if menu.title -%}
+_DEFAULT_TEMPLATE = """
+{%- if menu.title -%}
 --- {{ menu.title }} ---
 {% endif -%}
 {% for key, entry in menu -%}
