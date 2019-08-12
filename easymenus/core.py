@@ -42,7 +42,7 @@ class Menu:
 
         self.name = name
         self.template = template
-        self.meta = meta
+        self._meta = meta
 
         self.choices[name] = None
 
@@ -79,5 +79,5 @@ class Menu:
         return iter(self._entries.items())
 
     def __getattr__(self, key):
-        return self.meta.get(key)
+        return self._meta.get(key)
 
